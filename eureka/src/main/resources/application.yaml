@@ -1,0 +1,51 @@
+spring:
+    application:
+        name: eureka
+    profiles:
+        active: local
+---
+spring:
+    profiles: local
+
+server:
+    port: 8761
+
+eureka:
+    datacenter: local
+    environment: local
+    instance:
+        hostname: localhost
+    client:
+        registerWithEureka: false
+        fetchRegistry: false
+        serviceUrl:
+            defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+---
+spring:
+    profiles: aws
+
+server:
+    port: 8080
+
+dio:
+    base-domain: yourdomain.com
+    environment: dev
+    use-private-ip: false
+    aws-region: us-east-1
+    
+eureka:
+    datacenter: aws
+    environment: ${dio.environment}
+    client:
+        region: ${dio.aws-region}
+        useDnsForFetchingServiceUrls: true
+        eurekaServerDNSName: ${spring.application.name}.${dio.environment}.${dio.base-domain}
+        eurekaServerPort: ${server.port}
+        eurekaServerURLContext: eureka
+    server:
+        eIPBindRebindRetries: 0
+        eIPBindingRetryIntervalMs: 2073600000
+        eIPBindingRetryIntervalMsWhenUnbound: 2073600000
+        renewalThresholdUpdateIntervalMs: 120000
+        peerEurekaNodesUpdateIntervalMs: 180000

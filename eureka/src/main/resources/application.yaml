@@ -35,7 +35,7 @@ dio:
     aws-region: us-east-1
     
 eureka:
-    datacenter: aws
+    datacenter: cloud
     environment: ${dio.environment}
     client:
         region: ${dio.aws-region}
